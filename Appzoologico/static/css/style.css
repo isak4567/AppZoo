@@ -1,0 +1,36 @@
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  background-color: aquamarine;
+}
+
+header {
+  height: 100px;
+  width: 100%;
+}
+
+.cont_head {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.contenedor_logo {
+  height: 100%;
+}
+
+.contenedor_logo img {
+  height: 100%;
+}
+/*# sourceMappingURL=style.css.map */

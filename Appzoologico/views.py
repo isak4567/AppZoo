@@ -6,4 +6,8 @@ from django.http import HttpResponse
 
 def view_zool(request):
     
-    return HttpResponse("Hello")
+    return render(request, "index.html")
+
+def form_add_animal(request):
+
+    return render(request, "form_add_animal.html")

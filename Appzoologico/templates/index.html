@@ -18,7 +18,7 @@
 
         <div class="cont_head container ">
             <div class="contenedor_logo">
-                <img src="{% './static/img/logo.svg' %}" alt="" >
+                <img src="{% static './img/logo.svg' %}" alt="" >
             </div>
     
             <nav>
@@ -26,10 +26,10 @@
     
                     <li> Animales
                          <ul>
-                            <li><a href=""></a>Ingresar nuevo Animal</li>
-                            <li><a href=""></a>Buscar Animal</li>
-                            <li><a href=""></a>Modificar animal</li>
-                            <li><a href=""></a>Liberar animal</li>
+                            <li><a href="{% url 'add_animal' %}">Ingresar nuevo Animal</a></li>
+                            <li><a href="">Buscar Animal</a></li>
+                            <li><a href="">Modificar animal</a></li>
+                            <li><a href="">Liberar animal</a></li>
                          </ul> 
                     </li>
     
@@ -50,6 +50,7 @@
 
     </header>
 
+    {% block Main %}
     <main>
 
         <section>
@@ -66,9 +67,10 @@
                 <h2>Nuestro Corazones</h2>
                 <p>Lista de animales</p>
 
-                {% for animal in Animales %}
+                <!--{% for animal in Animales %}
 
-                {% endfor %}
+                {% endfor %}-->
+                
 
             </div>
             
@@ -80,13 +82,15 @@
 
             <p>Empleados</p>
 
-                {% for empleado in Empleados %}
+                <!--{% for animal in Animales %}
 
-                {% endfor %}
+                {% endfor %}-->
 
         </section>
 
     </main>
+    {% endblock %}
+    
 
     <footer>
 

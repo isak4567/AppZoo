@@ -4,10 +4,8 @@ from django.db import models
 class Animal_GrupoPrincipal (models.Model):
 
     nombre = models.CharField(max_length = 40)
-    vertebracion = models.CharField(max_length = 15)
     extremidades = models.IntegerField()
     tipo = models.CharField(max_length = 15)
-    mandibula = models.BooleanField()
     alimentacion = models.CharField(max_length = 15)
     conducta = models.CharField(max_length = 150)
 
@@ -16,17 +14,19 @@ class Animal_GrupoPrincipal (models.Model):
 
 class Animal_GrupoSecundario1 (Animal_GrupoPrincipal):
 
-    Subfilo_Vertebrado = models.CharField(max_length = 20)
+    Subfilo_Vertebrado = "Vertebrado"
 
 class Animal_GrupoSecundario2 (Animal_GrupoPrincipal):
 
-    Subfilo_Invertebrado = models.CharField(max_length = 20)
+    Subfilo_Invertebrado = "Invertebrado"
 
 class Empleado (models.Model):
 
     nombre = models.CharField(max_length = 50)
     fecha_dEntrada = models.DateField()
     turno = models.TimeField()
+
+    
     
 """
 class Guardias (Empleado, models.Model):

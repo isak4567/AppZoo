@@ -1,8 +1,10 @@
 from django.urls import path
 
-from Appzoologico.views import view_zool, form_add_animal
+from Appzoologico.views import view_zool, view_posts, view_about, view_contact
 
 urlpatterns = [
-    path('', view_zool),
-    path('/form_add_animal', form_add_animal, name="add_animal"),
+    path('', view_zool, name="Home"),
+    path('Posts/', view_posts, name="posts"),
+    path('About/', view_about, name="about"),
+    path('Contact/', view_contact, name="contact"),
 ]

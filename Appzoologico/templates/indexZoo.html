@@ -132,6 +132,15 @@
       </div>
     </section><!-- End Hero Slider Section -->
 
+    <section class="container">
+      {% for animal in vertebrados %}
+
+      <p>{{ animal.nombre }}</p>
+      <p>{{ animal.Especie }}</p>
+      <p>{{ animal.alimentacion }}</p>
+
+      {% endfor %}
+    </section>
     <!-- ======= Post Grid Section ======= -->
     <section id="posts" class="posts">
       <div class="container" data-aos="fade-up">

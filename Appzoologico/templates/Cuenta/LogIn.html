@@ -1,0 +1,21 @@
+{% extends 'indexZoo.html' %}
+
+{% load static %}
+
+{% block Main %}
+<main id="main">
+    
+  <form action="{% url 'LogIn' %}" method="POST"> {% csrf_token %}
+
+    {{ mensaje }}
+
+    {{ form.as_p }}
+
+    <a href="{% url 'RegistrarCuenta' %}"> ¿No tienes cuenta? Registrarte</a>
+    
+    <input type="submit" value="Ingresar">
+
+  </form>
+
+</main><!-- End #main -->
+{% endblock %}

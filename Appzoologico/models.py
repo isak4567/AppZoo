@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Animal_GrupoPrincipal (models.Model):
@@ -51,16 +52,17 @@ class Animal_GrupoSecundario2 (Animal_GrupoPrincipal):
 
 class Empleado (models.Model):
 
-    nombre = models.CharField(max_length = 50)
+    nombre = models.CharField(max_length = 30)
     fecha_dEntrada = models.DateField()
-    turno = models.TimeField()
+    rol = models.CharField(max_length = 30, default='')
+    descripcion = models.TextField(max_length = 80, default='')
 
-    
-    
 """
-class Guardias (Empleado, models.Model):
-    fuerza = 
-
-class Ayudantes (Empleado, models.Model):
-"""
-
+class Avatar (models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    imagen = models.ImageField(upload_to='avatares', null=True, blank = True)
+ 
+    def __str__(self):
+        return f"{self.user} - {self.imagen}"
+"""  

@@ -58,7 +58,11 @@
           <li><a href="{% url 'posts' %}">Posts</a></li>
           <li><a href="{% url 'about' %}">About</a></li>
           <li><a href="{% url 'contact' %}">Contact</a></li>
-          <li><a href="">Log in</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'LogOut' %}">Log Out</a></li>
+          {% else %}
+          <li><a href="{% url 'LogIn' %}">Log In</a></li>
+          {% endif %}
         </ul>
       </nav><!-- .navbar -->
 
@@ -75,6 +79,7 @@
   {% block Main %}
   <main id="main">
 
+    <h2>{{ mensaje }}</h2>
     <!-- ======= Hero Slider Section ======= -->
     <section id="hero-slider" class="hero-slider">
       <div class="container-md" data-aos="fade-in">

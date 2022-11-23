@@ -14,6 +14,7 @@ class Animal_GrupoPrincipal (models.Model):
     ]
     alimentacion = models.CharField(max_length = 12, choices = AlimentacionElecciones, default='Omnívoro')
     conducta = models.CharField(max_length = 45)
+    imagenAnimal = models.ImageField(upload_to='animalesImg', null=True, blank = True)
 
     class Meta:
         abstract = True
@@ -34,6 +35,10 @@ class Animal_GrupoSecundario1 (Animal_GrupoPrincipal):
         default= 'Mamifero',
     )
 
+    def __str__(self):
+        return f"{self.nombre} - {self.Subfilo_Vertebrado} - {self.Especie}"
+
+
 class Animal_GrupoSecundario2 (Animal_GrupoPrincipal):
 
     Subfilo_Invertebrado = "Invertebrado"
@@ -50,12 +55,20 @@ class Animal_GrupoSecundario2 (Animal_GrupoPrincipal):
         default= 'Insectos',
     )
 
+    def __str__(self):
+        return f"{self.nombre} - {self.Subfilo_Invertebrado} - {self.Especie}"
+
+
 class Empleado (models.Model):
 
     nombre = models.CharField(max_length = 30)
     fecha_dEntrada = models.DateField()
     rol = models.CharField(max_length = 30, default='')
     descripcion = models.TextField(max_length = 80, default='')
+    imagenEmpleado = models.ImageField(upload_to='empleadosImg', null=True, blank = True)
+
+    def __str__(self):
+        return f"{self.nombre} - {self.rol}"
 
 
 class Avatar (models.Model):

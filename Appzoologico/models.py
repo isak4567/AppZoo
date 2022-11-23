@@ -57,7 +57,7 @@ class Empleado (models.Model):
     rol = models.CharField(max_length = 30, default='')
     descripcion = models.TextField(max_length = 80, default='')
 
-"""
+
 class Avatar (models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
@@ -65,4 +65,4 @@ class Avatar (models.Model):
  
     def __str__(self):
         return f"{self.user} - {self.imagen}"
-"""  
+

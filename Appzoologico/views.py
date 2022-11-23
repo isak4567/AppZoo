@@ -2,8 +2,8 @@ from django.shortcuts import render
 from datetime import datetime
 #from Appzoologico.models import A
 from django.http import HttpResponse
-from .models import Animal_GrupoSecundario1, Animal_GrupoSecundario2, Empleado
-from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil
+from .models import Animal_GrupoSecundario1, Animal_GrupoSecundario2, Empleado, Avatar
+from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil, ImagenPerfil
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -14,8 +14,13 @@ from django.contrib.auth import login, authenticate
 def view_zool(request):
 
     vertebrados = Animal_GrupoSecundario1.objects.all()
+
+    try:
+        avatar = Avatar.objects.get(user = request.user)
+    except:
+        return render(request, "indexZoo.html",  {"vertebrados": vertebrados})
     
-    return render(request, "indexZoo.html",  {"vertebrados": vertebrados})
+    return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "imgPerfil": avatar.imagen.url})
 
 def view_posts(request):
     
@@ -48,8 +53,9 @@ def view_Login(request):
             if user:
 
                 login(request, user)
+                avatar = Avatar.objects.get(user = request.user)
 
-                return render(request, "IndexZoo.html", {"mensaje": f'Bienvenido {nombre}'})
+                return render(request, "IndexZoo.html", {"mensaje": f'Bienvenido {nombre}', "imgPerfil": avatar.imagen.url})
             else:
 
                 return render(request, "IndexZoo.html", {"mensaje": f'No pudo loguerse, usuario inexistente o incorrecto'})
@@ -88,10 +94,12 @@ def view_Registrarse(request):
 ################ Vistas de Perfil ################
 def view_Editar_Perfil(request):
     usuario = request.user
+    avatar = Avatar.objects.get(user = request.user)
 
     if request.method == "POST":
  
-        miFormulario = EditarPerfil(request.POST) 
+        miFormulario = EditarPerfil(request.POST)
+        miFormularioImagen = ImagenPerfil(request.POST, request.FILES) 
  
         if miFormulario.is_valid():
 
@@ -102,6 +110,18 @@ def view_Editar_Perfil(request):
             usuario.email = informacion["email"]
             usuario.save()
             
+            try:
+                print(request.FILES['imagen'])
+                avatar.imagen.delete()
+            except:
+                print("")
+
+            try:
+                avatar.imagen = request.FILES['imagen']
+                avatar.save()
+            except: 
+                print("")
+            
             return render(request, "IndexZoo.html", {"mensaje": f'Modificaste tu perfil satisfactoriamente {usuario.first_name}'})
         
         miFormulario = EditarPerfil(instance = request.user)
@@ -110,8 +130,9 @@ def view_Editar_Perfil(request):
 
     else:
         miFormulario = EditarPerfil(instance = request.user)
+        miFormularioImagen = ImagenPerfil(initial={'imagen': avatar.imagen})
     
-        return render(request, "./Cuenta\ActualizarPerfil.html", {'form': miFormulario})
+        return render(request, "./Cuenta\ActualizarPerfil.html", {'form': miFormulario, 'imgForm': miFormularioImagen})
 
 
 def view_Ingresar_F(request):

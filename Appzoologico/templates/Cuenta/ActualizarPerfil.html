@@ -5,11 +5,13 @@
 {% block Main %}
 <main id="main">
     
-  <form method="POST"> {% csrf_token %}
+  <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
 
     {{ mensaje }}
 
     {{ form.as_p }}
+
+    {{ imgForm.as_p }}
     
     <input type="submit" value="Actualizar">
 

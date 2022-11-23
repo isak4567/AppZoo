@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
+from .models import Avatar
 
 
 class UsuarioFormulario (UserCreationForm):
@@ -19,6 +20,13 @@ class EditarPerfil (UserChangeForm):
     class Meta:
         model = User
         fields = ['first_name','last_name','email']
+
+
+class ImagenPerfil (forms.ModelForm):
+
+    class Meta:
+        model = Avatar
+        fields = ['imagen']
 
 
 class EmpleadoF (forms.Form):

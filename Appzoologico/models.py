@@ -1,11 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class Animal_GrupoPrincipal (models.Model):
 
     nombre = models.CharField(max_length = 40)
-    extremidades = models.IntegerField()
+    extremidades = models.IntegerField(
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0)
+        ]
+    )
     AlimentacionElecciones = [
         ('Omnívoro', 'Omnívoro'),
         ('Carnívoro', 'Carnívoro'),

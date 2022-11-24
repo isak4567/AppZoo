@@ -3,7 +3,7 @@ from datetime import datetime
 #from Appzoologico.models import A
 from django.http import HttpResponse
 from .models import Animal_GrupoSecundario1, Animal_GrupoSecundario2, Empleado, Avatar
-from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil, ImagenPerfil
+from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil, ImagenPerfil, AnimalG1F
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -18,7 +18,6 @@ def view_zool(request):
 
     try:
         avatar = Avatar.objects.get(user = request.user)
-        print(avatar.imagen)
     except:
         return render(request, "indexZoo.html",  {"vertebrados": vertebrados})
     
@@ -64,7 +63,6 @@ def view_Login(request):
 
                 return render(request, "IndexZoo.html", {"mensaje": f'Bienvenido {nombre}', "imgPerfil": avatar.imagen.url})
             else:
-
                 return render(request, "IndexZoo.html", {"mensaje": f'No pudo loguerse, usuario inexistente o incorrecto'})
         
         miFormulario = AuthenticationForm()
@@ -146,47 +144,45 @@ def view_Editar_Perfil(request):
     
         return render(request, "./Cuenta\ActualizarPerfil.html", {'form': miFormulario, 'imgForm': miFormularioImagen})
 
+################ Vistas de Animales ################
+def view_EliminarAnimalG1(request, id):
 
-def view_Ingresar_F(request):
-    """
     if request.method == "POST":
  
-        miFormulario = UsuarioF(request.POST) # Aqui me llega la informacion del html
-        print(miFormulario)
+        animalG1 = Animal_GrupoSecundario1.objects.get(id = id)
+        nombre = animalG1.nombre
+        animalG1.delete()
+
+        vertebrados = Animal_GrupoSecundario1.objects.all()
+
+        return render(request, "indexZoo.html", {"mensaje": f'Liberaste a {nombre}.', "vertebrados": vertebrados})
+    
+
+def view_AgregarAnimalG1(request):
+
+    if request.method == "POST":
  
-        if miFormulario.is_valid:
+        miFormulario = AnimalG1F(request.POST, request.FILES) # Aqui me llega la informacion del html
+
+        if miFormulario.is_valid():
+
             informacion = miFormulario.cleaned_data
-            curso = Curso(nombre=informacion["curso"], camada=informacion["camada"])
-            curso.save()
-            return render(request, "AppCoder/inicio.html")
+            animalGrupo1 = Animal_GrupoSecundario1(
+                nombre=informacion["nombre"], extremidades=informacion["extremidades"], 
+                alimentacion=informacion["alimentacion"], conducta=informacion["conducta"], 
+                Especie=informacion["Especie"], imagenAnimal=request.FILES['imagenAnimal']
+                )
+            animalGrupo1.save()
+            return render(request, "indexZoo.html", {"mensaje": f'Agregado {informacion["nombre"]} con exito.'})
+        else:    
+            return render(request, "Animales/AgregarAnimalG1.html", {"mensaje": f'Error, no se pudo agregar.'})
 
     else:
     
-    miFormulario = UsuarioF()
+        miFormulario = AnimalG1F()
     
-    return render(request, "Ingresar_F.html", {'form': miFormulario})
-    """
-
-################ Vistas de Empleados ################
-
-    """
-    if request.method == "POST":
- 
-        miFormulario = UsuarioF(request.POST) # Aqui me llega la informacion del html
-        print(miFormulario)
- 
-        if miFormulario.is_valid:
-            informacion = miFormulario.cleaned_data
-            curso = Curso(nombre=informacion["curso"], camada=informacion["camada"])
-            curso.save()
-            return render(request, "AppCoder/inicio.html")
-
-    else:
-    """
-    miFormulario = EmpleadoF()
-    
-    return render(request, "Ingresar_F.html", {'form': miFormulario})
-
+        return render(request, "Animales/AgregarAnimalG1.html", {'form': miFormulario})
+   
 
 class yyT(CreateView):
 
@@ -194,3 +190,6 @@ class yyT(CreateView):
     template_name = './Ingresar_AF.html'
     success_url = 'Posts/'
     fields = ['nombre','extremidades','alimentacion','conducta','Especie']
+
+
+################ Vistas de Empleados ################

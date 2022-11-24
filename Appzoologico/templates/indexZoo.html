@@ -46,7 +46,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-      <a href="indexZoo.html" class="logo d-flex align-items-center col-4">
+      <a href="{% url 'Home' %}" class="logo d-flex align-items-center col-4">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="{% static 'assets/img/logo.png" alt=""> -->
         <h1>ZenBlog</h1>
@@ -148,18 +148,27 @@
     <!-- End Hero Slider Section -->
 
     <section class="container">
-      <div class="row g-5">
+      <h2 data-aos="fade">Animales Nuestros</h2>
+
+      <div class="row " data-aos="fade">
         {% for animal in vertebrados %}
-        <div class="row col-4">
-          <img class="col-6 img-fluid" src="{{ animal.imagenAnimal.url }}" alt="">
-          <div class="col-6">
-            <h4>Nombre:       {{ animal.nombre }}</h4>
-            <p>Clasificacion: {{ animal.Subfilo_Vertebrado}}</p>
-            <p>Especie:       {{ animal.Especie }}</p>
-            <p>alimentacion:  {{ animal.alimentacion }}</p>
-            <p>Conducta:      {{ animal.conducta }}</p>
-            
+        <div class="col-4">
+          <div class="row col">
+            <img class="col-6 img-fluid" src="{{ animal.imagenAnimal.url }}" alt="">
+            <div class="col-6">
+              <h4>Nombre:       {{ animal.nombre }}</h4>
+              <p>Clasificacion: {{ animal.Subfilo_Vertebrado}}</p>
+              <p>Especie:       {{ animal.Especie }}</p>
+             <p>alimentacion:  {{ animal.alimentacion }}</p>
+             <p>Conducta:      {{ animal.conducta }}</p>
+            </div>
           </div>
+          <a class="" href="">Ver mas</a>
+          {% if user.is_staff %}
+            <form action="{% url 'EliminarAnimalG1' animal.id %}" method="post">{% csrf_token %}
+              <button type="submit">Liberar</button>
+            </form>
+          {% endif %}
         </div>
         {% endfor %}
       </div>
@@ -284,15 +293,15 @@
           <div class="col-lg-6">
             <h3 class="footer-heading">About ZenBlog</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ab, perspiciatis beatae autem deleniti voluptate nulla a dolores, exercitationem eveniet libero laudantium recusandae officiis qui aliquid blanditiis omnis quae. Explicabo?</p>
-            <p><a href="about.html" class="footer-link-more">Learn More</a></p>
+            <p><a href="{% url 'about' %}" class="footer-link-more">Learn More</a></p>
           </div>
           <div class="col-6 col-lg-2">
             <h3 class="footer-heading">Navigation</h3>
             <ul class="footer-links list-unstyled">
-              <li><a href="index.html"><i class="bi bi-chevron-right"></i> Home</a></li>
-              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Posts</a></li>
-              <li><a href="about.html"><i class="bi bi-chevron-right"></i> About us</a></li>
-              <li><a href="contact.html"><i class="bi bi-chevron-right"></i> Contact</a></li>
+              <li><a href="{% url 'Home' %}"><i class="bi bi-chevron-right"></i> Home</a></li>
+              <li><a href="{% url 'posts' %}"><i class="bi bi-chevron-right"></i> Posts</a></li>
+              <li><a href="{% url 'about' %}"><i class="bi bi-chevron-right"></i> About us</a></li>
+              <li><a href="{% url 'contact' %}"><i class="bi bi-chevron-right"></i> Contact</a></li>
             </ul>
           </div>
 

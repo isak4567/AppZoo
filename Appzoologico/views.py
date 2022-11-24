@@ -7,6 +7,7 @@ from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil, ImagenPerfil
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 
 # Create your views here.
@@ -17,6 +18,7 @@ def view_zool(request):
 
     try:
         avatar = Avatar.objects.get(user = request.user)
+        print(avatar.imagen)
     except:
         return render(request, "indexZoo.html",  {"vertebrados": vertebrados})
     
@@ -27,8 +29,10 @@ def view_posts(request):
     return render(request, "Posts.html")
 
 def view_about(request):
+
+    empleados = Empleado.objects.all()
     
-    return render(request, "About.html")
+    return render(request, "About.html", {"Empleados": empleados})
 
 def view_contact(request):
     
@@ -53,7 +57,10 @@ def view_Login(request):
             if user:
 
                 login(request, user)
-                avatar = Avatar.objects.get(user = request.user)
+                try:
+                    avatar = Avatar.objects.get(user = request.user)
+                except:
+                    return render(request, "indexZoo.html",  {"mensaje": f'Bienvenido {nombre}'})
 
                 return render(request, "IndexZoo.html", {"mensaje": f'Bienvenido {nombre}', "imgPerfil": avatar.imagen.url})
             else:
@@ -79,6 +86,10 @@ def view_Registrarse(request):
 
             informacion = miFormulario.cleaned_data["username"]
             miFormulario.save()
+
+            usuario = User.objects.get(username = informacion)
+            avatar = Avatar(user= usuario, imagen= "avatares/default.png")
+            avatar.save()
 
             return render(request, "IndexZoo.html", {"mensaje": f'Te has Registrado satisfactoriamente {informacion}'})
         
@@ -112,7 +123,8 @@ def view_Editar_Perfil(request):
             
             try:
                 print(request.FILES['imagen'])
-                avatar.imagen.delete()
+                if avatar.imagen != "avatares/default.png":
+                    avatar.imagen.delete()
             except:
                 print("")
 

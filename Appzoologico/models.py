@@ -13,7 +13,7 @@ class Animal_GrupoPrincipal (models.Model):
         ('Insectivoros', 'Insectivoros'),
     ]
     alimentacion = models.CharField(max_length = 12, choices = AlimentacionElecciones, default='Omnívoro')
-    conducta = models.CharField(max_length = 45)
+    conducta = models.CharField(max_length = 150)
     imagenAnimal = models.ImageField(upload_to='animalesImg', null=True, blank = True)
 
     class Meta:
@@ -64,7 +64,7 @@ class Empleado (models.Model):
     nombre = models.CharField(max_length = 30)
     fecha_dEntrada = models.DateField()
     rol = models.CharField(max_length = 30, default='')
-    descripcion = models.TextField(max_length = 80, default='')
+    descripcion = models.TextField(max_length = 300, default='')
     imagenEmpleado = models.ImageField(upload_to='empleadosImg', null=True, blank = True)
 
     def __str__(self):

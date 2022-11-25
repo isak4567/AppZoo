@@ -1,0 +1,41 @@
+{% extends 'indexZoo.html' %}
+
+{% load static %}
+
+{% block Main %}
+<main id="main">
+
+  <div class="contaniner">
+    <div class="row" data-aos="fade">
+      <div class="col-8">
+        <div class="row col">
+          <img class="col-6 img-fluid" src="{{ animal.imagenAnimal.url }}" alt="">
+          <div class="col-6">
+            <h3>{{ animal }}</h3>
+            <h4>Nombre:       {{ animal.nombre }}</h4>
+            {% if animal.Subfilo_Vertebrado %}
+            <p>Clasificacion: {{ animal.Subfilo_Vertebrado}}</p>
+            {% else %}
+            <p>Clasificacion: {{ animal.Subfilo_Invertebrado}}</p>
+            {% endif %}
+            <p>Especie:       {{ animal.Especie }}</p>
+            <p>alimentacion:  {{ animal.alimentacion }}</p>
+            <p>Conducta:      {{ animal.conducta }}</p>
+            <p>extremidades:      {{ animal.extremidades }}</p>
+          </div>
+        </div>
+        {% if user.is_staff %}
+          <form action="{% url 'EliminarAnimalG1' animal.id %}" method="post">{% csrf_token %}
+            <button type="submit">Liberar</button>
+          </form>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+</main><!-- End #main -->
+{% endblock %}

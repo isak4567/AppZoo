@@ -18,13 +18,15 @@
          <p>Conducta:      {{ animal.conducta }}</p>
         </div>
       </div>
-      <a class="" href="">Ver mas</a>
+      <a href="{% url 'DetallesAnimalG1' animal.id %}">Ver mas</a>
       {% if user.is_staff %}
         <form action="{% url 'EliminarAnimalG1' animal.id %}" method="post">{% csrf_token %}
           <button type="submit">Liberar</button>
         </form>
       {% endif %}
+      {% if user.is_authenticated %}
       <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+      {% endif %}
     </div>
     {% endfor %}
 
@@ -40,13 +42,15 @@
           <p>Conducta:      {{ animal.conducta }}</p>
         </div>
       </div>
-      <a class="" href="">Ver mas</a>
+      <a href="{% url 'DetallesAnimalG2' animal.id %}">Ver mas</a>
       {% if user.is_staff %}
         <form action="{% url 'EliminarAnimalG2' animal.id %}" method="post">{% csrf_token %}
           <button type="submit">Liberar</button>
         </form>
       {% endif %}
+      {% if user.is_authenticated %}
       <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+      {% endif %}
     </div>
     {% endfor %}
   </div>

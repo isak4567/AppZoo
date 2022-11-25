@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
-from .models import Avatar, Animal_GrupoSecundario1, Posteo
+from .models import Avatar, Animal_GrupoSecundario1, Animal_GrupoSecundario2, Posteo
 
 
 class UsuarioFormulario (UserCreationForm):
@@ -33,6 +33,12 @@ class AnimalG1F (forms.ModelForm):
 
     class Meta:
         model = Animal_GrupoSecundario1
+        fields = ('__all__')
+
+class AnimalG2F (forms.ModelForm):
+
+    class Meta:
+        model = Animal_GrupoSecundario2
         fields = ('__all__')
 
 

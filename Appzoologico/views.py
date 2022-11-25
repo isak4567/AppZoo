@@ -2,8 +2,8 @@ from django.shortcuts import render
 from datetime import datetime
 #from Appzoologico.models import A
 from django.http import HttpResponse
-from .models import Animal_GrupoSecundario1, Animal_GrupoSecundario2, Empleado, Avatar
-from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil, ImagenPerfil, AnimalG1F
+from .models import Animal_GrupoSecundario1, Animal_GrupoSecundario2, Empleado, Avatar, Posteo
+from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil, ImagenPerfil, AnimalG1F, Postformulario
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -15,17 +15,21 @@ from django.contrib.auth import login, authenticate
 def view_zool(request):
 
     vertebrados = Animal_GrupoSecundario1.objects.all()
+    invertebrados = Animal_GrupoSecundario2.objects.all()
+    post = Posteo.objects.all()
 
     try:
         avatar = Avatar.objects.get(user = request.user)
     except:
-        return render(request, "indexZoo.html",  {"vertebrados": vertebrados})
+        return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "post":post})
     
-    return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "imgPerfil": avatar.imagen.url})
+    return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url, "post":post})
 
 def view_posts(request):
     
-    return render(request, "Posts.html")
+    post = Posteo.objects.all()
+
+    return render(request, "Posts.html", {'post': post})
 
 def view_about(request):
 
@@ -154,42 +158,92 @@ def view_EliminarAnimalG1(request, id):
         animalG1.delete()
 
         vertebrados = Animal_GrupoSecundario1.objects.all()
+        invertebrados = Animal_GrupoSecundario2.objects.all()
+        avatar = Avatar.objects.get(user = request.user)
 
-        return render(request, "indexZoo.html", {"mensaje": f'Liberaste a {nombre}.', "vertebrados": vertebrados})
+        return render(request, "indexZoo.html", {"mensaje": f'Liberaste a {nombre}.', "vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url})
     
-
 def view_AgregarAnimalG1(request):
 
     if request.method == "POST":
- 
+
         miFormulario = AnimalG1F(request.POST, request.FILES) # Aqui me llega la informacion del html
 
         if miFormulario.is_valid():
 
             informacion = miFormulario.cleaned_data
+            avatar = Avatar.objects.get(user = request.user)
             animalGrupo1 = Animal_GrupoSecundario1(
                 nombre=informacion["nombre"], extremidades=informacion["extremidades"], 
                 alimentacion=informacion["alimentacion"], conducta=informacion["conducta"], 
-                Especie=informacion["Especie"], imagenAnimal=request.FILES['imagenAnimal']
+                Especie=informacion["Especie"], imagenAnimal=request.FILES['imagenAnimal'],
+                avatar_url=avatar.imagen.url
                 )
             animalGrupo1.save()
-            return render(request, "indexZoo.html", {"mensaje": f'Agregado {informacion["nombre"]} con exito.'})
+            return render(request, "indexZoo.html", {"mensaje": f'Agregado {informacion["nombre"]} con exito.', "imgPerfil": avatar.imagen.url})
         else:    
-            return render(request, "Animales/AgregarAnimalG1.html", {"mensaje": f'Error, no se pudo agregar.'})
+            return render(request, "Animales/AgregarAnimalG1.html", {"mensaje": f'Error, no se pudo agregar.', "imgPerfil": avatar.imagen.url})
 
     else:
     
         miFormulario = AnimalG1F()
     
-        return render(request, "Animales/AgregarAnimalG1.html", {'form': miFormulario})
+        return render(request, "Animales/AgregarAnimalG1.html", {'form': miFormulario, "imgPerfil": avatar.imagen.url})
+   
+def view_EliminarAnimalG2(request, id):
+
+    if request.method == "POST":
+ 
+        animalG2 = Animal_GrupoSecundario2.objects.get(id = id)
+        nombre = animalG2.nombre
+        animalG2.delete()
+
+        vertebrados = Animal_GrupoSecundario1.objects.all()
+        invertebrados = Animal_GrupoSecundario2.objects.all()
+        avatar = Avatar.objects.get(user = request.user)
+
+        return render(request, "indexZoo.html", {"mensaje": f'Liberaste a {nombre}.', "vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url})
    
 
-class yyT(CreateView):
 
-    model = Animal_GrupoSecundario1
-    template_name = './Ingresar_AF.html'
-    success_url = 'Posts/'
-    fields = ['nombre','extremidades','alimentacion','conducta','Especie']
+def view_ListasAnimales(request):
 
+    animalG1 = Animal_GrupoSecundario1.objects.all()
+    animalG2 = Animal_GrupoSecundario2.objects.all()
+    avatar = Avatar.objects.get(user = request.user)        
+    
+    return render(request, "Animales/ListasAnimales.html", {'vertebrados': animalG1, 'invertebrados': animalG2, "imgPerfil": avatar.imagen.url})
+   
 
 ################ Vistas de Empleados ################
+
+################ Vistas de Posteo ################
+
+def agregarpost(request, nombre):
+
+    print(f'Datos ------------------ {request.method}')
+
+    if request.method == "POST":
+
+        miFormulario = Postformulario(request.POST, request.FILES)
+        print(f'Datos ------------------ {miFormulario.is_valid()}')
+
+        if miFormulario.is_valid():
+
+            informacion = miFormulario.cleaned_data
+            avatar = Avatar.objects.get(user = request.user)
+            posteo = Posteo(
+                titulo=informacion["titulo"], subtitulo=informacion["subtitulo"], 
+                posteo=informacion["posteo"], fecha_post=datetime.now(), user=request.user, 
+                imagen=request.FILES['imagen'], animal=nombre, avatar_url=avatar.imagen.url
+                )
+            posteo.save()
+            return render(request, "Posts.html", {"mensaje": f'Posteo agregado con exito.'})
+        else:    
+            return render(request, "Posteos/Agregarpost.html", {"mensaje": f'Error, no se pudo agregar.'})
+
+    else:
+    
+        miFormulario = Postformulario()
+    
+        return render(request, "Posteos/Agregarpost.html", {'form': miFormulario})

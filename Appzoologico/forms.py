@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import User
-from .models import Avatar, Animal_GrupoSecundario1
+from .models import Avatar, Animal_GrupoSecundario1, Posteo
 
 
 class UsuarioFormulario (UserCreationForm):
@@ -42,4 +42,10 @@ class EmpleadoF (forms.Form):
     fecha_dEntrada = forms.DateField()
     rol = forms.CharField()
     descripcion = forms.CharField(widget=forms.Textarea(attrs={"rows":5}))
+
+class Postformulario(forms.ModelForm):
+
+    class Meta:
+        model= Posteo
+        fields = ['titulo', 'subtitulo', 'posteo', 'imagen']
 

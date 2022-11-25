@@ -1,0 +1,55 @@
+{% extends 'indexZoo.html' %}
+
+{% load static %}
+
+{% block Main %}
+<main id="main">
+
+  <div class="row " data-aos="fade">
+    {% for animal in vertebrados %}
+    <div class="col-4">
+      <div class="row col">
+        <img class="col-6 img-fluid" src="{{ animal.imagenAnimal.url }}" alt="">
+        <div class="col-6">
+          <h4>Nombre:       {{ animal.nombre }}</h4>
+          <p>Clasificacion: {{ animal.Subfilo_Vertebrado}}</p>
+          <p>Especie:       {{ animal.Especie }}</p>
+         <p>alimentacion:  {{ animal.alimentacion }}</p>
+         <p>Conducta:      {{ animal.conducta }}</p>
+        </div>
+      </div>
+      <a class="" href="">Ver mas</a>
+      {% if user.is_staff %}
+        <form action="{% url 'EliminarAnimalG1' animal.id %}" method="post">{% csrf_token %}
+          <button type="submit">Liberar</button>
+        </form>
+      {% endif %}
+      <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+    </div>
+    {% endfor %}
+
+    {% for animal in invertebrados %}
+    <div class="col-4">
+      <div class="row col">
+        <img class="col-6 img-fluid" src="{{ animal.imagenAnimal.url }}" alt="">
+        <div class="col-6">
+          <h4>Nombre:       {{ animal.nombre }}</h4>
+          <p>Clasificacion: {{ animal.Subfilo_Invertebrado}}</p>
+          <p>Especie:       {{ animal.Especie }}</p>
+          <p>alimentacion:  {{ animal.alimentacion }}</p>
+          <p>Conducta:      {{ animal.conducta }}</p>
+        </div>
+      </div>
+      <a class="" href="">Ver mas</a>
+      {% if user.is_staff %}
+        <form action="{% url 'EliminarAnimalG2' animal.id %}" method="post">{% csrf_token %}
+          <button type="submit">Liberar</button>
+        </form>
+      {% endif %}
+      <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+    </div>
+    {% endfor %}
+  </div>
+
+</main><!-- End #main -->
+{% endblock %}

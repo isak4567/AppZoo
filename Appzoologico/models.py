@@ -42,7 +42,7 @@ class Animal_GrupoSecundario1 (Animal_GrupoPrincipal):
     )
 
     def __str__(self):
-        return f"{self.nombre} - {self.Subfilo_Vertebrado} - {self.Especie}"
+        return f"{self.id} {self.nombre} - {self.Subfilo_Vertebrado} - {self.Especie}"
 
 
 class Animal_GrupoSecundario2 (Animal_GrupoPrincipal):
@@ -62,7 +62,7 @@ class Animal_GrupoSecundario2 (Animal_GrupoPrincipal):
     )
 
     def __str__(self):
-        return f"{self.nombre} - {self.Subfilo_Invertebrado} - {self.Especie}"
+        return f"{self.id} {self.nombre} - {self.Subfilo_Invertebrado} - {self.Especie}"
 
 
 class Empleado (models.Model):
@@ -84,4 +84,19 @@ class Avatar (models.Model):
  
     def __str__(self):
         return f"{self.user} - {self.imagen}"
+
+class Posteo(models.Model):
+
+    titulo = models.CharField(max_length=80)
+    subtitulo = models.TextField(max_length=400)
+    posteo = models.TextField(max_length=2000)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fecha_post = models.DateTimeField(auto_now=False, auto_now_add=False)
+    animal = models.CharField(default='',max_length=80)
+    imagen = models.ImageField(upload_to='posts', null=True, blank = True)
+    avatar_url = models.CharField(default='',max_length=100)
+
+    def __str__(self):
+        return f"Posteo {self.id} - {self.titulo}"
+
 

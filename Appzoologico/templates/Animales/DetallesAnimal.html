@@ -30,7 +30,9 @@
           </form>
         {% endif %}
         {% if user.is_authenticated %}
-        <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+        <button>
+          <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+        </button>
         {% endif %}
       </div>
     </div>

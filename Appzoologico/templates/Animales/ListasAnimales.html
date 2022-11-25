@@ -20,12 +20,17 @@
       </div>
       <a href="{% url 'DetallesAnimalG1' animal.id %}">Ver mas</a>
       {% if user.is_staff %}
+        <button>
+          <a href="{% url 'ModificarAnimalG1' animal.id %}">Modificar</a>
+        </button>
         <form action="{% url 'EliminarAnimalG1' animal.id %}" method="post">{% csrf_token %}
           <button type="submit">Liberar</button>
         </form>
       {% endif %}
       {% if user.is_authenticated %}
-      <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+      <button>
+        <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+      </button>
       {% endif %}
     </div>
     {% endfor %}
@@ -44,12 +49,17 @@
       </div>
       <a href="{% url 'DetallesAnimalG2' animal.id %}">Ver mas</a>
       {% if user.is_staff %}
+        <button>
+          <a href="{% url 'ModificarAnimalG2' animal.id %}">Modificar</a>
+        </button>
         <form action="{% url 'EliminarAnimalG2' animal.id %}" method="post">{% csrf_token %}
           <button type="submit">Liberar</button>
         </form>
       {% endif %}
       {% if user.is_authenticated %}
-      <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+      <button>
+        <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+      </button>
       {% endif %}
     </div>
     {% endfor %}

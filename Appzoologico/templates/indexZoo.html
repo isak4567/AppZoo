@@ -89,15 +89,17 @@
   <main id="main">
 
     <h2>{{ mensaje }}</h2>
-
+    <!-- ================== Animales Section ============== -->
     <section class="container">
       <h2 data-aos="fade">Animales Nuestros</h2>
       <a href="{% url 'ListasAnimales' %}">Ver todos los animales</a>
+      <!-- ____ Permisos de admin ____ -->
       {% if user.is_staff %}
       <a href="{% url 'AgregarAnimalG1' %}">Agregar Vertebrado</a>
       <a href="{% url 'AgregarAnimalG2' %}">Agregar Invertebrado</a>
       {% endif %}
       <div class="row " data-aos="fade">
+        <!-- ____ Obj animal1 ____ -->
         {% for animal in vertebrados %}
         <div class="col-4">
           <div class="row col">
@@ -110,18 +112,25 @@
              <p>Conducta:      {{ animal.conducta }}</p>
             </div>
           </div>
+          <!-- ____ Links a CRUD ____ -->
           <a href="{% url 'DetallesAnimalG1' animal.id %}">Ver mas</a>
           {% if user.is_staff %}
             <form action="{% url 'EliminarAnimalG1' animal.id %}" method="post">{% csrf_token %}
               <button type="submit">Liberar</button>
             </form>
             <button>
-              <a href="{% url 'ModificarAnimalG1' animal.id %}">Modicar</a>
+              <a href="{% url 'ModificarAnimalG1' animal.id %}">Modificar</a>
             </button>
+          {% endif %}
+          {% if user.is_authenticated %}
+          <button>
+            <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+          </button>
           {% endif %}
         </div>
         {% endfor %}
 
+        <!-- ____ Obj animal2 ____ -->
         {% for animal in invertebrados %}
         <div class="col-4">
           <div class="row col">
@@ -134,25 +143,33 @@
               <p>Conducta:      {{ animal.conducta }}</p>
             </div>
           </div>
+          <!-- ____ Links a CRUD ____ -->
           <a href="{% url 'DetallesAnimalG2' animal.id %}">Ver mas</a>
           {% if user.is_staff %}
             <form action="{% url 'EliminarAnimalG2' animal.id %}" method="post">{% csrf_token %}
               <button type="submit">Liberar</button>
             </form>
             <button>
-              <a href="{% url 'ModificarAnimalG2' animal.id %}">Modicar</a>
+              <a href="{% url 'ModificarAnimalG2' animal.id %}">Modificar</a>
             </button>
+          {% endif %}
+          {% if user.is_authenticated %}
+          <button>
+            <a href="{% url 'AgregarPost' animal.nombre %}">Hacer un articulo sobre el</a>
+          </button>
           {% endif %}
         </div>
         {% endfor %}
       </div>
       
-    </section>
-    <!-- ======= Post Grid Section ======= -->
+    </section> <!-- ========== End Animales Section ======= -->
+
+    <!-- ======= Post Section ======= -->
     <section id="posts" class="posts">
             
       <div class="container" data-aos="fade-up">
         <div class="row g-5">
+          <!-- ____ Obj post ____ -->
           {% for item in post %}
           <div class="col-lg-4 border-start custom-border">
             <div class="post-entry-1 ">
@@ -173,7 +190,7 @@
 
         </div> <!-- End .row -->
       </div>
-    </section> <!-- End Post Grid Section -->
+    </section> <!-- End Post Section -->
 
   </main><!-- End #main -->
   {% endblock %}

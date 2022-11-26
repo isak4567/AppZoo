@@ -9,9 +9,11 @@
       <div class="container">
           <div class="col-md-12" data-aos="fade-up">
             <h3 class="category-title">Todos los Posts</h3>
+            {% if user.is_authenticated %}
             <button>
               <a href="{% url 'ListasAnimales' %}">Agregar un nuevo articulo</a>
             </button>
+            {% endif %}
             {% for item in post %}
               
             <div class="d-md-flex post-entry-2 half">

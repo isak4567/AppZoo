@@ -2,7 +2,7 @@ from django.urls import path
 
 from Appzoologico.views import (
     view_zool, view_posts, view_about, view_contact,
-    view_Login, view_Registrarse, view_Editar_Perfil,
+    view_Login, view_Registrarse, view_Detalles_Perfil, view_Editar_Perfil,
     view_AgregarAnimalG1, view_DetallesAnimalG1, view_ModificarAnimalG1, view_EliminarAnimalG1, 
     view_AgregarAnimalG2, view_DetallesAnimalG2, view_ModificarAnimalG2, view_EliminarAnimalG2,
     view_ListasAnimales,
@@ -18,11 +18,12 @@ urlpatterns = [
     path('Posts/', view_posts, name="posts"),
     path('About/', view_about, name="about"),
     path('Contact/', view_contact, name="contact"),
+    # ---------------------------- Urls Usuario ----------------------------
     path('Registrarse/', view_Registrarse, name="RegistrarCuenta"),
-    # ---------------------------- Urls Log ----------------------------
     path('LogIn/', view_Login, name="LogIn"),
-    path('ActualizarPerfil/', view_Editar_Perfil, name="ActualizarPerfil"),
     path('logout/', LogoutView.as_view(template_name='IndexZoo.html'), name='LogOut'),
+    path('DetallesPerfil/', view_Detalles_Perfil, name="DetallesPerfil"),
+    path('ActualizarPerfil/', view_Editar_Perfil, name="ActualizarPerfil"),
     # ---------------------------- Urls AnimalG1 ----------------------------
     path('AgregarAnimalG1/', view_AgregarAnimalG1, name="AgregarAnimalG1"),
     path('DetallesAnimalG1/<int:id>', view_DetallesAnimalG1, name="DetallesAnimalG1"),

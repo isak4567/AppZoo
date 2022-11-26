@@ -73,11 +73,10 @@
             <img src="{{ imgPerfil }}" alt="avatar" class="figure-img img-fluid rounded-circle ">
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="{% url 'ActualizarPerfil' %}">Ver Perfil</a></li>
-            <li><a class="dropdown-item" href="#">Editar Perfil</a></li>
+            <li><a class="dropdown-item" href="{% url 'DetallesPerfil' %}">Ver Perfil</a></li>
+            <li><a class="dropdown-item" href="{% url 'ActualizarPerfil' %}">Editar Perfil</a></li>
           </ul>
         </div>
-        
         {% endif %}
       </div>
 
@@ -92,11 +91,17 @@
     <!-- ================== Animales Section ============== -->
     <section class="container">
       <h2 data-aos="fade">Animales Nuestros</h2>
-      <a href="{% url 'ListasAnimales' %}">Ver todos los animales</a>
+      <button>
+        <a href="{% url 'ListasAnimales' %}">Ver todos los animales</a>
+      </button>
       <!-- ____ Permisos de admin ____ -->
       {% if user.is_staff %}
-      <a href="{% url 'AgregarAnimalG1' %}">Agregar Vertebrado</a>
-      <a href="{% url 'AgregarAnimalG2' %}">Agregar Invertebrado</a>
+      <button>
+        <a href="{% url 'AgregarAnimalG1' %}">Agregar Vertebrado</a>
+      </button>
+      <button>
+        <a href="{% url 'AgregarAnimalG2' %}">Agregar Invertebrado</a>
+      </button>
       {% endif %}
       <div class="row " data-aos="fade">
         <!-- ____ Obj animal1 ____ -->
@@ -183,10 +188,12 @@
                 <div class="name">
                   <h3 class="m-0 p-0">{{item.user.username}}</h3>
                 </div>
+                {% if user.is_authenticated %}
                 <form action="{% url 'PostEliminar' item.id %}" method="post">{% csrf_token %}
                   <button type="submit">Eliminar articulo</button>
                 </form>
                 <button><a href="{% url 'PostModificar' item.id %}">Modificar Articulo</a></button>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -225,25 +232,17 @@
             <h3 class="footer-heading">Recent Posts</h3>
 
             <ul class="footer-links footer-blog-entry list-unstyled">
+              {% for item in recentPost %}
               <li>
-                <a href="single-post.html" class="d-flex align-items-center">
-                  <img src="{% static 'assets/img/post-sq-1.jpg' %}" alt="" class="img-fluid me-3">
+                <a href="{% url 'PostDetalles' item.id %}" class="d-flex align-items-center">
+                  <img src="{{ item.imagen.url }}" alt="" class="img-fluid me-3">
                   <div>
-                    <div class="post-meta d-block"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <span>5 Great Startup Tips for Female Founders</span>
+                    <div class="post-meta d-block"><span class="date">{{item.animal}}</span> <span class="mx-1">&bullet;</span> <span>{{item.fecha_post}}</span></div>
+                    <span>{{item.titulo}}</span>
                   </div>
                 </a>
               </li>
-
-              <li>
-                <a href="single-post.html" class="d-flex align-items-center">
-                  <img src="{% static 'assets/img/post-sq-2.jpg' %}" alt="" class="img-fluid me-3">
-                  <div>
-                    <div class="post-meta d-block"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <span>What is the son of Football Coach John Gruden, Deuce Gruden doing Now?</span>
-                  </div>
-                </a>
-              </li>
+              {% endfor %}
             </ul>
 
           </div>

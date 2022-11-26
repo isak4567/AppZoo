@@ -1,0 +1,32 @@
+{% extends 'indexZoo.html' %}
+
+{% load static %}
+
+{% block Main %}
+<main id="main">
+
+  <div class="contaniner">
+    <div class="row" data-aos="fade">
+      <div class="col-8">
+        <div class="row col">
+          <img class="col-6 img-fluid" src="{{ imgPerfil }}" alt="">
+          <div class="col-6">
+            <h3>{{ user }}</h3>
+            <h4>Nombre de usuario:       {{ user.username }}</h4>
+            <p>Nombre: {{ user.first_name}}</p>
+            <p>Apellido:       {{ user.last_name }}</p>
+            <p>Email:  {{ user.email }}</p>
+            <p>Cuenta en uso:      {{ user.is_active }}</p>
+            <p>Derechos de Administrador:      {{ user.is_staff }}</p>
+            <button>
+              <a class="dropdown-item" href="{% url 'ActualizarPerfil' %}">Editar Perfil</a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</main><!-- End #main -->
+{% endblock %}

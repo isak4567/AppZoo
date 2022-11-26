@@ -14,29 +14,55 @@ def view_zool(request):
     vertebrados = Animal_GrupoSecundario1.objects.all()
     invertebrados = Animal_GrupoSecundario2.objects.all()
     post = Posteo.objects.all()
+    postFooter= post[::-1]
 
     try:
         avatar = Avatar.objects.get(user = request.user)
     except:
-        return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "post":post})
+        return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "post":post, "recentPost": postFooter[0:2]})
     
-    return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url, "post":post})
+    return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url, "post":post, "recentPost": postFooter[0:2]})
+
 
 def view_posts(request):
     
     post = Posteo.objects.all()
+    postFooter= post[::-1]
 
-    return render(request, "Posts.html", {'post': post})
+    try:
+        avatar = Avatar.objects.get(user = request.user)
+    except:
+        return render(request, "Posts.html", {'post': post, "recentPost": postFooter[0:2]})
+
+    return render(request, "Posts.html", {'post': post, "recentPost": postFooter[0:2], "imgPerfil": avatar.imagen.url})
+
 
 def view_about(request):
 
     empleados = Empleado.objects.all()
+    post = Posteo.objects.all()
+    postFooter= post[::-1]
+
+    try:
+        avatar = Avatar.objects.get(user = request.user)
+    except:
+        return render(request, "About.html", {"Empleados": empleados, "recentPost": postFooter[0:2]})
     
-    return render(request, "About.html", {"Empleados": empleados})
+    return render(request, "About.html", {"Empleados": empleados, "recentPost": postFooter[0:2], "imgPerfil": avatar.imagen.url})
+
 
 def view_contact(request):
+
+    post = Posteo.objects.all()
+    postFooter= post[::-1]
+
+    try:
+        avatar = Avatar.objects.get(user = request.user)
+    except:
+        return render(request, "Contact.html", {"recentPost": postFooter[0:2]})
     
-    return render(request, "Contact.html")
+    return render(request, "Contact.html", {"recentPost": postFooter[0:2], "imgPerfil": avatar.imagen.url})
+
 
 ################ Vistas de Usuarios ################
 def view_Login(request):
@@ -75,6 +101,7 @@ def view_Login(request):
     
         return render(request, "./Cuenta/LogIn.html", {'form': miFormulario})
 
+
 def view_Registrarse(request):
     
     if request.method == "POST":
@@ -101,7 +128,14 @@ def view_Registrarse(request):
     
         return render(request, "./Cuenta/Registrarse.html", {'form': miFormulario})
 
+
 ################ Vistas de Perfil ################
+def view_Detalles_Perfil(request):
+    avatar = Avatar.objects.get(user = request.user)
+    
+    return render(request, "./Cuenta\DetallesPerfil.html", {"imgPerfil": avatar.imagen.url})
+
+
 def view_Editar_Perfil(request):
     usuario = request.user
     avatar = Avatar.objects.get(user = request.user)
@@ -144,6 +178,7 @@ def view_Editar_Perfil(request):
         miFormularioImagen = ImagenPerfil(initial={'imagen': avatar.imagen})
     
         return render(request, "./Cuenta\ActualizarPerfil.html", {'form': miFormulario, 'imgForm': miFormularioImagen})
+
 
 ################ Vistas de Animales ################
 def view_AgregarAnimalG1(request):
@@ -360,7 +395,6 @@ def view_ListasAnimales(request):
    
 
 ################ Vistas de Posteo ################
-
 def agregarpost(request, nombre):
 
     print(f'Datos ------------------ {request.method}')

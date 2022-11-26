@@ -189,10 +189,12 @@
                   <h3 class="m-0 p-0">{{item.user.username}}</h3>
                 </div>
                 {% if user.is_authenticated %}
+                {% if user.username == item.user.username or user.is_staff %}
                 <form action="{% url 'PostEliminar' item.id %}" method="post">{% csrf_token %}
                   <button type="submit">Eliminar articulo</button>
                 </form>
                 <button><a href="{% url 'PostModificar' item.id %}">Modificar Articulo</a></button>
+                {% endif %}
                 {% endif %}
               </div>
             </div>
@@ -268,18 +270,6 @@
             </div>
 
           </div>
-
-          <div class="col-md-6">
-            <div class="social-links mb-3 mb-lg-0 text-center text-md-end">
-              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-              <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
-              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-            </div>
-
-          </div>
-
         </div>
 
       </div>

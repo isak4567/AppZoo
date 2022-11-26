@@ -18,6 +18,26 @@
                 <img src="{{post.imagen.url}}" alt="" class="img-fluid">
               </figure>
               <p>{{post.posteo}}</p>
+
+              <div class="col-4 d-flex align-items-center justify-content-around author">
+                <p class="post-meta">Escrito por: </p>
+                <div class="d-flex align-items-center">
+                  <div class="name">
+                    <h3 class="m-0 p-0">{{post.user.username}}</h3>
+                  </div>
+                  <div class="photo"><img src="{{ post.avatar_url }}" alt="" class="img-fluid"></div>
+                </div>
+              </div>
+              <div>
+                {% if user.is_authenticated %}
+                {% if user.username == post.user.username or user.is_staff %}
+                <form action="{% url 'PostEliminar' post.id %}" method="post">{% csrf_token %}
+                  <button type="submit">Eliminar articulo</button>
+                </form>
+                <button><a href="{% url 'PostModificar' post.id %}">Modificar Articulo</a></button>
+                {% endif %}
+                {% endif %}
+              </div>
             </div><!-- End Single Post Content -->
             
           </div>

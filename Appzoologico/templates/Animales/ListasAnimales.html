@@ -6,9 +6,10 @@
 <main id="main">
 
   <h1> Nuestros Animales </h1>
-
+  {% if user.is_authenticated %}
   <h2>Ve a detalle nuestros animales e inspirate a escribir un articulo sobre ellos</h2>
   <p class="post-meta ">Click en hacer un articulo sobre el animal que desees</p>
+  {% endif %}
   <div class="row " data-aos="fade">
     {% for animal in vertebrados %}
     <div class="col-4">

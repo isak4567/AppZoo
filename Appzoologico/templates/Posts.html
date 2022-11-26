@@ -15,18 +15,22 @@
             {% for item in post %}
               
             <div class="d-md-flex post-entry-2 half">
-              <a href="single-post.html" class="me-4 thumbnail">
+              <a href="{% url 'PostDetalles' item.id %}" class="me-4 thumbnail">
                 <img src="{{ item.imagen.url }}" alt="" class="img-fluid">
               </a>
               <div>
                 <div class="post-meta"><span class="date">{{item.animal}}</span> <span class="mx-1">&bullet;</span> <span>{{item.fecha_post}}</span></div>
-                <h3><a href="single-post.html">{{item.titulo}}</a></h3>
+                <h3><a href="{% url 'PostDetalles' item.id %}">{{item.titulo}}</a></h3>
                 <p>{{item.subtitulo}}</p>
                 <div class="d-flex align-items-center author">
                   <div class="photo"><img src="{{ item.avatar_url }}" alt="" class="img-fluid"></div>
                   <div class="name">
                     <h3 class="m-0 p-0">{{item.user.username}}</h3>
                   </div>
+                  <form action="{% url 'PostEliminar' item.id %}" method="post">{% csrf_token %}
+                    <button type="submit">Eliminar articulo</button>
+                  </form>
+                  <button><a href="{% url 'PostModificar' item.id %}">Modificar Articulo</a></button>
                 </div>
               </div>
             </div>

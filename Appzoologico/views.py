@@ -1,12 +1,9 @@
 from django.shortcuts import render
 from datetime import datetime
-#from Appzoologico.models import A
-from django.http import HttpResponse
 from .models import Animal_GrupoSecundario1, Animal_GrupoSecundario2, Empleado, Avatar, Posteo
-from .forms import  UsuarioFormulario, EmpleadoF, EditarPerfil, ImagenPerfil, AnimalG1F, AnimalG2F, Postformulario
-from django.views.generic.edit import CreateView
+from .forms import  UsuarioFormulario, EditarPerfil, ImagenPerfil, AnimalG1F, AnimalG2F, Postformulario
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 
@@ -362,8 +359,6 @@ def view_ListasAnimales(request):
     return render(request, "Animales/ListasAnimales.html", {'vertebrados': animalG1, 'invertebrados': animalG2, "imgPerfil": avatar.imagen.url})
    
 
-################ Vistas de Empleados ################
-
 ################ Vistas de Posteo ################
 
 def agregarpost(request, nombre):
@@ -394,3 +389,71 @@ def agregarpost(request, nombre):
         miFormulario = Postformulario()
     
         return render(request, "Posteos/Agregarpost.html", {'form': miFormulario})
+
+
+def view_EliminarPost(request, id):
+
+    PostEliminar = Posteo.objects.get(id = id)
+
+    if request.method == "POST":
+ 
+        titulo = PostEliminar.titulo
+        PostEliminar.imagen.delete()
+        PostEliminar.delete()
+
+        todoPost = Posteo.objects.all()
+
+        return render(request, "Posts.html", {"mensaje": f'Eliminaste este articulo {titulo}.', "post": todoPost})
+
+
+def view_ModificarPost(request, id):
+
+    post = Posteo.objects.get(id=id)
+    avatar = Avatar.objects.get(user = request.user)
+
+    if request.method == "POST":
+
+        miFormulario = Postformulario(request.POST, request.FILES) # Aqui me llega la informacion del html
+
+        if miFormulario.is_valid():
+
+            informacion = miFormulario.cleaned_data
+            
+            post.titulo=informacion["titulo"] 
+            post.subtitulo=informacion["subtitulo"] 
+            post.posteo=informacion["posteo"] 
+
+            try:
+                print(request.FILES['imagen'])
+                post.imagen.delete()
+
+            except:
+                print("")
+
+            try:
+                post.imagen = request.FILES['imagen']
+            except: 
+                print("")
+            
+            post.save()
+
+            return render(request, "Posts.html", {"mensaje": f'Modificado el articulo con éxito.', "imgPerfil": avatar.imagen.url})
+        else:    
+            return render(request, "Posteos/ModificarPost.html", {"mensaje": f'Error, no se pudo modificar.', "imgPerfil": avatar.imagen.url})
+
+    else:
+    
+        miFormulario = Postformulario(instance = post)
+    
+        return render(request, "Posteos/ModificarPost.html", {'form': miFormulario, "imgPerfil": avatar.imagen.url})
+
+
+def view_DetallesPost(request, id):
+
+    Post = Posteo.objects.get(id = id)
+
+    return render(request, "Posteos/single-post.html", {"post": Post})
+
+
+
+

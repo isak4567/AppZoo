@@ -6,7 +6,7 @@ from Appzoologico.views import (
     view_AgregarAnimalG1, view_DetallesAnimalG1, view_ModificarAnimalG1, view_EliminarAnimalG1, 
     view_AgregarAnimalG2, view_DetallesAnimalG2, view_ModificarAnimalG2, view_EliminarAnimalG2,
     view_ListasAnimales,
-    agregarpost
+    agregarpost, view_EliminarPost, view_ModificarPost, view_DetallesPost
     )
 
 from django.contrib.auth.views import LogoutView
@@ -37,4 +37,7 @@ urlpatterns = [
     path('ListasAnimales/', view_ListasAnimales, name="ListasAnimales"),
     # ---------------------------- Urls Post ----------------------------
     path('AgregarPost/<nombre>', agregarpost, name="AgregarPost"),
+    path('PostEliminar/<int:id>', view_EliminarPost, name="PostEliminar"),
+    path('PostModificar/<int:id>', view_ModificarPost, name="PostModificar"),
+    path('PostDetalles/<int:id>', view_DetallesPost, name="PostDetalles")
 ]

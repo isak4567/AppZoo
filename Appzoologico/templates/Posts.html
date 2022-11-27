@@ -30,10 +30,12 @@
                     <h3 class="m-0 p-0">{{item.user.username}}</h3>
                   </div>
                   {% if user.is_authenticated %}
+                  {% if user.username == item.user.username or user.is_staff %}
                   <form action="{% url 'PostEliminar' item.id %}" method="post">{% csrf_token %}
                     <button type="submit">Eliminar articulo</button>
                   </form>
                   <button><a href="{% url 'PostModificar' item.id %}">Modificar Articulo</a></button>
+                  {% endif %}
                   {% endif %}
                 </div>
               </div>

@@ -5,6 +5,8 @@ from .forms import  UsuarioFormulario, EditarPerfil, ImagenPerfil, AnimalG1F, An
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login, authenticate
 
 # Create your views here.
@@ -130,12 +132,13 @@ def view_Registrarse(request):
 
 
 ################ Vistas de Perfil ################
+@login_required
 def view_Detalles_Perfil(request):
     avatar = Avatar.objects.get(user = request.user)
     
     return render(request, "./Cuenta\DetallesPerfil.html", {"imgPerfil": avatar.imagen.url})
 
-
+@login_required
 def view_Editar_Perfil(request):
     usuario = request.user
     avatar = Avatar.objects.get(user = request.user)
@@ -181,6 +184,7 @@ def view_Editar_Perfil(request):
 
 
 ################ Vistas de Animales ################
+@staff_member_required(login_url='/Appzoologico/LogIn')
 def view_AgregarAnimalG1(request):
 
     avatar = Avatar.objects.get(user = request.user)
@@ -222,6 +226,7 @@ def view_DetallesAnimalG1(request, id):
     return render(request, "./Animales/DetallesAnimal.html", {"animal": animalG1, "imgPerfil": avatar.imagen.url})
 
 
+@staff_member_required(login_url='/Appzoologico/LogIn')
 def view_ModificarAnimalG1(request, id):
 
     animalG1 = Animal_GrupoSecundario1.objects.get(id=id)
@@ -263,8 +268,9 @@ def view_ModificarAnimalG1(request, id):
         miFormulario = AnimalG1F(instance = animalG1)
     
         return render(request, "Animales/ModificarAnimalG1.html", {'form': miFormulario, "imgPerfil": avatar.imagen.url})
- 
 
+
+@staff_member_required(login_url='/Appzoologico/LogIn')
 def view_EliminarAnimalG1(request, id):
 
     if request.method == "POST":
@@ -280,8 +286,9 @@ def view_EliminarAnimalG1(request, id):
         avatar = Avatar.objects.get(user = request.user)
 
         return render(request, "indexZoo.html", {"mensaje": f'Liberaste a {nombre}.', "vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url})
-    
 
+
+@staff_member_required(login_url='/Appzoologico/LogIn')
 def view_AgregarAnimalG2(request):
 
     avatar = Avatar.objects.get(user = request.user)
@@ -311,6 +318,7 @@ def view_AgregarAnimalG2(request):
         return render(request, "Animales/AgregarAnimalG1.html", {'form': miFormulario, "imgPerfil": avatar.imagen.url})
 
 
+@staff_member_required(login_url='/Appzoologico/LogIn')
 def view_ModificarAnimalG2(request, id):
 
     animalG2 = Animal_GrupoSecundario2.objects.get(id=id)
@@ -366,6 +374,7 @@ def view_DetallesAnimalG2(request, id):
     return render(request, "./Animales/DetallesAnimal.html", {"animal": animalG2, "imgPerfil": avatar.imagen.url})
 
 
+@staff_member_required(login_url='/Appzoologico/LogIn')
 def view_EliminarAnimalG2(request, id):
 
     if request.method == "POST":
@@ -395,6 +404,7 @@ def view_ListasAnimales(request):
    
 
 ################ Vistas de Posteo ################
+@login_required
 def agregarpost(request, nombre):
 
     print(f'Datos ------------------ {request.method}')
@@ -425,6 +435,7 @@ def agregarpost(request, nombre):
         return render(request, "Posteos/Agregarpost.html", {'form': miFormulario})
 
 
+@login_required
 def view_EliminarPost(request, id):
 
     PostEliminar = Posteo.objects.get(id = id)
@@ -440,6 +451,7 @@ def view_EliminarPost(request, id):
         return render(request, "Posts.html", {"mensaje": f'Eliminaste este articulo {titulo}.', "post": todoPost})
 
 
+@login_required
 def view_ModificarPost(request, id):
 
     post = Posteo.objects.get(id=id)
@@ -485,8 +497,15 @@ def view_ModificarPost(request, id):
 def view_DetallesPost(request, id):
 
     Post = Posteo.objects.get(id = id)
+    posteos = Posteo.objects.all()
+    postFooter= posteos[::-1]
 
-    return render(request, "Posteos/single-post.html", {"post": Post})
+    try:
+        avatar = Avatar.objects.get(user = request.user)
+    except:
+        return render(request, "Posteos/single-post.html", {"post": Post, "recentPost": postFooter[0:2]})
+        
+    return render(request, "Posteos/single-post.html", {"post": Post, "recentPost": postFooter[0:2], "imgPerfil": avatar.imagen.url})
 
 
 

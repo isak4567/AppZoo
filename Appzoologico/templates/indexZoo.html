@@ -86,7 +86,7 @@
 
   {% block Main %}
   <main id="main">
-
+    
     <h2>{{ mensaje }}</h2>
     <!-- ================== Animales Section ============== -->
     <section class="container">
@@ -181,7 +181,7 @@
               <a href="{% url 'PostDetalles' item.id %}"><img src="{{ item.imagen.url }}" alt="" class="img-fluid"></a>
               <div class="post-meta"><span class="date">{{item.animal}}</span> <span class="mx-1">&bullet;</span> <span>{{item.fecha_post}}</span></div>
               <h2><a href="{% url 'PostDetalles' item.id %}">{{item.titulo}}</a></h2>
-              <p class="mb-4 d-block">{{item.subtitulo}}</p>
+              <p class="mb-4 d-block">{{item.subtitulo | safe}}</p>
 
               <div class="d-flex align-items-center author">
                 <div class="photo"><img src="{{ item.avatar_url }}" alt="" class="img-fluid"></div>

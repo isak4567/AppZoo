@@ -8,6 +8,7 @@
     <section>
       <div class="container">
           <div class="col-md-12" data-aos="fade-up">
+            <h2>{{ mensaje }}</h2>
             <h3 class="category-title">Todos los Posts</h3>
             {% if user.is_authenticated %}
             <button>
@@ -23,7 +24,7 @@
               <div>
                 <div class="post-meta"><span class="date">{{item.animal}}</span> <span class="mx-1">&bullet;</span> <span>{{item.fecha_post}}</span></div>
                 <h3><a href="{% url 'PostDetalles' item.id %}">{{item.titulo}}</a></h3>
-                <p>{{item.subtitulo}}</p>
+                <p>{{item.subtitulo | safe}}</p>
                 <div class="d-flex align-items-center author">
                   <div class="photo"><img src="{{ item.avatar_url }}" alt="" class="img-fluid"></div>
                   <div class="name">

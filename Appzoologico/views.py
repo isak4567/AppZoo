@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login, authenticate
 
-# Create your views here.
-
-def view_zool(request):
+# Funciones
+def Vista_Base_Index(request, mensaje):
 
     vertebrados = Animal_GrupoSecundario1.objects.all()
     invertebrados = Animal_GrupoSecundario2.objects.all()
@@ -21,9 +20,14 @@ def view_zool(request):
     try:
         avatar = Avatar.objects.get(user = request.user)
     except:
-        return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "post":post, "recentPost": postFooter[0:2]})
+        return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "post":post, "recentPost": postFooter[0:2], "mensaje": mensaje})
     
-    return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url, "post":post, "recentPost": postFooter[0:2]})
+    return render(request, "indexZoo.html",  {"vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url, "post":post, "recentPost": postFooter[0:2], "mensaje": mensaje})
+
+################ Vistas Principales ################
+def view_zool(request):
+
+    return Vista_Base_Index(request, "")
 
 
 def view_posts(request):
@@ -85,14 +89,8 @@ def view_Login(request):
             if user:
 
                 login(request, user)
-                try:
-                    avatar = Avatar.objects.get(user = request.user)
-                except:
-                    return render(request, "indexZoo.html",  {"mensaje": f'Bienvenido {nombre}'})
-
-                return render(request, "IndexZoo.html", {"mensaje": f'Bienvenido {nombre}', "imgPerfil": avatar.imagen.url})
-            else:
-                return render(request, "IndexZoo.html", {"mensaje": f'No pudo loguerse, usuario inexistente o incorrecto'})
+             
+                return Vista_Base_Index(request, f"Bienvenido {nombre}")
         
         miFormulario = AuthenticationForm()
     
@@ -119,7 +117,7 @@ def view_Registrarse(request):
             avatar = Avatar(user= usuario, imagen= "avatares/default.png")
             avatar.save()
 
-            return render(request, "IndexZoo.html", {"mensaje": f'Te has Registrado satisfactoriamente {informacion}'})
+            return Vista_Base_Index(request, f'Te has Registrado satisfactoriamente {informacion}')
         
         miFormulario = UsuarioFormulario()
     
@@ -170,7 +168,7 @@ def view_Editar_Perfil(request):
             except: 
                 print("")
             
-            return render(request, "IndexZoo.html", {"mensaje": f'Modificaste tu perfil satisfactoriamente {usuario.first_name}'})
+            return Vista_Base_Index(request, f'Modificaste tu perfil satisfactoriamente {usuario.first_name}')
         
         miFormulario = EditarPerfil(instance = request.user)
     
@@ -203,7 +201,9 @@ def view_AgregarAnimalG1(request):
                 Especie=informacion["Especie"], imagenAnimal=request.FILES['imagenAnimal']
                 )
             animalGrupo1.save()
-            return render(request, "indexZoo.html", {"mensaje": f'Agregado {informacion["nombre"]} con exito.', "imgPerfil": avatar.imagen.url})
+
+            return Vista_Base_Index(request, f'Agregado {informacion["nombre"]} con exito.')
+
         else:    
             return render(request, "Animales/AgregarAnimalG1.html", {"mensaje": f'Error, no se pudo agregar.', "imgPerfil": avatar.imagen.url})
 
@@ -259,7 +259,7 @@ def view_ModificarAnimalG1(request, id):
             
             animalG1.save()
 
-            return render(request, "indexZoo.html", {"mensaje": f'Modificado animal con exito.', "imgPerfil": avatar.imagen.url})
+            return Vista_Base_Index(request, f'Modificado animal con exito.')
         else:    
             return render(request, "Animales/ModificarAnimalG1.html", {"mensaje": f'Error, no se pudo modificar.', "imgPerfil": avatar.imagen.url})
 
@@ -281,11 +281,7 @@ def view_EliminarAnimalG1(request, id):
         
         animalG1.delete()
 
-        vertebrados = Animal_GrupoSecundario1.objects.all()
-        invertebrados = Animal_GrupoSecundario2.objects.all()
-        avatar = Avatar.objects.get(user = request.user)
-
-        return render(request, "indexZoo.html", {"mensaje": f'Liberaste a {nombre}.', "vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url})
+        return Vista_Base_Index(request, f'Liberaste a {nombre}.')
 
 
 @staff_member_required(login_url='/Appzoologico/LogIn')
@@ -307,8 +303,11 @@ def view_AgregarAnimalG2(request):
                 Especie=informacion["Especie"], imagenAnimal=request.FILES['imagenAnimal']
                 )
             animalGrupo2.save()
-            return render(request, "indexZoo.html", {"mensaje": f'Agregado {informacion["nombre"]} con exito.', "imgPerfil": avatar.imagen.url})
+
+            return Vista_Base_Index(request, f'Agregado {informacion["nombre"]} con exito.')
+
         else:    
+
             return render(request, "Animales/AgregarAnimalG1.html", {"mensaje": f'Error, no se pudo agregar.', "imgPerfil": avatar.imagen.url})
 
     else:
@@ -351,7 +350,7 @@ def view_ModificarAnimalG2(request, id):
             
             animalG2.save()
 
-            return render(request, "indexZoo.html", {"mensaje": f'Modificado animal con exito.', "imgPerfil": avatar.imagen.url})
+            return Vista_Base_Index(request, f'Modificado animal con exito.')
         else:    
             return render(request, "Animales/ModificarAnimalG1.html", {"mensaje": f'Error, no se pudo modificar.', "imgPerfil": avatar.imagen.url})
 
@@ -383,11 +382,7 @@ def view_EliminarAnimalG2(request, id):
         nombre = animalG2.nombre
         animalG2.delete()
 
-        vertebrados = Animal_GrupoSecundario1.objects.all()
-        invertebrados = Animal_GrupoSecundario2.objects.all()
-        avatar = Avatar.objects.get(user = request.user)
-
-        return render(request, "indexZoo.html", {"mensaje": f'Liberaste a {nombre}.', "vertebrados": vertebrados, "invertebrados": invertebrados, "imgPerfil": avatar.imagen.url})
+        return Vista_Base_Index(request, f'Liberaste a {nombre}.')
    
 
 def view_ListasAnimales(request):
